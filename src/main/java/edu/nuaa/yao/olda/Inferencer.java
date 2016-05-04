@@ -28,6 +28,7 @@
 
 package edu.nuaa.yao.olda;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -110,8 +111,9 @@ public class Inferencer {
 	/**
 	 * inference new model ~ getting dataset from file specified in option
 	 * @return
+	 * @throws IOException 
 	 */
-	public Model inference(){	
+	public Model inference() throws IOException{	
 		//System.out.println("inference");
 		
 		newModel = new Model();

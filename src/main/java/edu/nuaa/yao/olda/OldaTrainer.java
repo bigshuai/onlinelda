@@ -1,5 +1,7 @@
 package edu.nuaa.yao.olda;
 
+import java.io.IOException;
+
 
 
 public class OldaTrainer {
@@ -13,7 +15,7 @@ public class OldaTrainer {
 	public double Kalpha;
 	public double Vbeta;
 	public double[] Vobeta;
-	
+	public int docnum;
 	public boolean init(OldaArgs option) {
 		this.option = option;
 		trnModel = new OldaModel();
@@ -31,10 +33,11 @@ public class OldaTrainer {
 		Kalpha = trnModel.K * trnModel.alpha;
 		Vbeta = trnModel.V * trnModel.beta;
 		Vobeta = new double[trnModel.K];
+		docnum=trnModel.docnum;
 		return true;
 	}
 	
-	public void train() {
+	public void train() throws IOException {
 		System.out.println("Sampling " + trnModel.niters + " iteration!");
 		
 		int lastIter = trnModel.liter;
@@ -66,7 +69,7 @@ public class OldaTrainer {
 		trnModel.saveModel(trnModel.modelName);
 	}
 	
-	public void trainOlda() {
+	public void trainOlda() throws IOException {
 		
 		System.out.println("Train NO:" + 1 + " model");
 
@@ -75,7 +78,8 @@ public class OldaTrainer {
 		B[0] = trnModel.phi;
 		vocWindow[0] = trnModel.data.localVoc;
 		
-		int i;
+		int i=0;
+		//System.out.println(docnum);
 		
 		for (i = 2; i <= option.delta; i++) {
 			System.out.println("Train NO:" + i + " model");
@@ -88,7 +92,7 @@ public class OldaTrainer {
 			vocWindow[i-1] = trnModel.data.localVoc;
 		}
 		
-		while(trnModel.initNewOldaModel(option, globalVoc, i)) {
+		while(trnModel.initNewOldaModel(option, globalVoc, i)&&(i<docnum)) {
 			computeObeta();
 			System.out.println("Train NO:" + i + " model");
 			trainNext();
@@ -97,7 +101,7 @@ public class OldaTrainer {
 		}
 	}
 	
-	public void trainNext() {
+	public void trainNext() throws IOException {
 		System.out.println("Sampling " + trnModel.niters + " iteration!");
 		
 		int lastIter = trnModel.liter;

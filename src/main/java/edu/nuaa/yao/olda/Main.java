@@ -4,7 +4,7 @@ package edu.nuaa.yao.olda;
 
 public class Main {
 	public static void main(String[] args) {
-		String configPath = "./cfg/yeolda.properties";
+		String configPath = "./cfg/olda.properties";
 		OldaArgs option = OldaArgs.initOldaArgs(configPath);
 		try {
 			if (!option.initflag){

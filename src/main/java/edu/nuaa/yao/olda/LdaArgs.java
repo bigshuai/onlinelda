@@ -25,7 +25,7 @@ public class LdaArgs {
 	public int estc = 0;
 	public int inf = 0;
 	public boolean initflag = false;
-
+	public int docnum;
 	
 	public static LdaArgs initLdaArgs(String configPath) {
 
@@ -98,6 +98,7 @@ public class LdaArgs {
 		String _est = properties.getProperty("est");
 		String _estc = properties.getProperty("estc");
 		String _inf = properties.getProperty("inf");
+		String _docnum=properties.getProperty("docnum");
 		
 		ldaArgs.alpha = Double.parseDouble(_alpha);
 		ldaArgs.beta = Double.parseDouble(_beta);
@@ -114,6 +115,7 @@ public class LdaArgs {
 		ldaArgs.estc = Integer.parseInt(_estc);
 		ldaArgs.inf = Integer.parseInt(_inf);
 		ldaArgs.initflag = true;
+		ldaArgs.docnum= Integer.parseInt(_docnum);
 	}
 	
 	public void increaseNtopic(int i) {

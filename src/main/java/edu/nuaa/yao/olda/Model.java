@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
+
+
 public class Model {
 	
 	//---------------------------------------------------------------
@@ -56,7 +58,7 @@ public class Model {
 	public int savestep; //saving period
 	public int twords; //print out top words per each topic
 	public int withrawdata;
-	
+	public int docnum;
 	// Estimated/Inferenced parameters
 	public double[][] theta;
 	public double[][] phi;
@@ -532,10 +534,10 @@ public class Model {
 		return false;
 	}
 	
-	protected boolean saveModelTwordsWithDomain(String filename){
+	protected boolean saveModelTwordsWithDomain(String filename) throws IOException{
 		
 		BufferedWriter bw = null;
-		try {
+		
 			bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(filename), "UTF-8"));
 			
@@ -543,14 +545,26 @@ public class Model {
 				twords = V;
 			}
 			
-			boolean[] domainExists = new boolean[Tool.DOMAINS.size()];
+			//boolean[] domainExists = new boolean[Tool.DOMAINS.size()];
 
 			for (int k = 0; k < K; k++){
 				Map<Integer, Double> wordsProbsMap = new HashMap<Integer, Double>(V);
 				for (int w = 0; w < V; w++) {
 					wordsProbsMap.put(w, phi[k][w]);
 				}
-				List<Entry<Integer, Double>> wordsProbsList = 
+				List<Integer> tWordsIndexArray = new ArrayList<Integer>(); 
+				for(int j = 0; j < V; j++){
+					tWordsIndexArray.add(new Integer(j));
+				}
+				Collections.sort(tWordsIndexArray, new Model.TwordsComparable(phi[k]));
+				bw.write("topic " + k + "\t:\n");
+				for(int t = 0; t < twords; t++){
+					bw.write(data.localVoc.id2word.get(tWordsIndexArray.get(t)) + " " + phi[k][tWordsIndexArray.get(t)] + "\n");
+				}
+				bw.write("\n");
+			}
+			bw.close();
+				/*list<Entry<Integer, Double>> wordsProbsList = 
 						new ArrayList<Entry<Integer, Double>>(wordsProbsMap.entrySet());
 				Collections.sort(wordsProbsList, new Comparator<Entry<Integer, Double>>() {
 
@@ -561,10 +575,10 @@ public class Model {
 				});
 				
 				List<Pair<Integer, Double>> docsProbsList = new ArrayList<Pair<Integer, Double>>();
-				double[] docsProbs = new double[Tool.DOMAINS.size()];
-				for (int i = 0; i < M; i++) {
-					docsProbs[Tool.DOMAINS.indexOf(data.docs.get(i).domain)] += theta[i][k];
-				}
+				//double[] docsProbs = new double[Tool.DOMAINS.size()];
+				//for (int i = 0; i < M; i++) {
+				//	docsProbs[Tool.DOMAINS.indexOf(data.docs.get(i).domain)] += theta[i][k];
+				//}
 				for (int i = 0; i < docsProbs.length; i++) {
 					Pair<Integer, Double> pair = new Pair<Integer, Double>(i, docsProbs[i]);
 					docsProbsList.add(pair);
@@ -602,13 +616,9 @@ public class Model {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		*/
+			
+		
 		return false;
 	}
 	
@@ -641,8 +651,9 @@ public class Model {
 	
     /**
 	 * Save model
+     * @throws IOException 
 	 */
-	public boolean saveModel(String modelName){
+	public boolean saveModel(String modelName) throws IOException{
 		if (!saveModelTAssign(dir + File.separator + modelName + tassignSuffix)) {
 			return false;
 		}
@@ -659,10 +670,10 @@ public class Model {
 			return false;
 		}
 		
-		/*if (twords > 0) {
+		if (twords > 0) {
 			if (!saveModelTwordsWithDomain(dir + File.separator + modelName + twordsSuffix))
 				return false;
-		}*/
+		}
 		return true;
 	}
 	
@@ -931,5 +942,21 @@ public class Model {
 		Model model2 = new Model();
 		model2.initEstimatedModel("./models/0603/2");
 		System.out.println(model1.data.localVoc.word2id.get("yeahkw"));
+	}
+public class TwordsComparable implements Comparator<Integer> {
+		
+		public double [] sortProb; // Store probability of each word in topic k
+		
+		public TwordsComparable (double[] sortProb){
+			this.sortProb = sortProb;
+		}
+
+		public int compare(Integer o1, Integer o2) {
+			// TODO Auto-generated method stub
+			//Sort topic word index according to the probability of each word in topic k
+			if(sortProb[o1] > sortProb[o2]) return -1;
+			else if(sortProb[o1] < sortProb[o2]) return 1;
+			else return 0;
+		}
 	}
 }

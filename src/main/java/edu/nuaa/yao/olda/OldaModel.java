@@ -37,7 +37,7 @@ public class OldaModel extends Model{
 		wordMapFile = option.wordMapFileName;
 		delta = option.delta;
 		omega = option.omega;
-		
+		docnum=option.docnum;
 		return true;    	
 	}
 	
@@ -47,7 +47,7 @@ public class OldaModel extends Model{
     public boolean initFirstOldaModel() {
     	
     	p = new double[K];
-    	System.out.println(dir + File.separator + dfile + File.separator + "1.txt");
+    	//System.out.println(dir + File.separator + dfile + File.separator + "1.txt");
 		data = Corpus.loadCorpus(dir + File.separator + dfile + File.separator + "1.txt");
      	
 		modelName += "-1";
