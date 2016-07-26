@@ -1,7 +1,7 @@
 package edu.nuaa.yao.olda;
 
 public class Document {
-
+//词语索引数组，长度，原始字符串，domain
 	public int[] words;
 	public int length;
 	public String rawStr;
