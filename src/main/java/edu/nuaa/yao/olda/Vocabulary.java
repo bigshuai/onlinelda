@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Vocabulary {
+	//词典类 map list
 	public Map<String, Integer> word2id;
 	public List<String> id2word;
 	
