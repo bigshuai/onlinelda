@@ -7,17 +7,16 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class LdaArgs {
-	
+	//LDA参数配置文件
 	public static Properties properties = new Properties();
-	
 	public double beta = 0.01;
 	public String dfile = "";
 	public String dir = "";
-	public int niters = 1000;
-	public int ntopics = 100;
+	public int niters = 1000;  //迭代1000次
+	public int ntopics = 100;  //100个主题
 	public double alpha = 0.5;
 	public int savestep = 100;
-	public int twords = 100;
+	public int twords = 100;   //前100个词语
 	public String wordMapFileName = "wordmap.txt";
 	public String modelName= "model-final";
 	public boolean withrawdata = false;
@@ -26,14 +25,14 @@ public class LdaArgs {
 	public int inf = 0;
 	public boolean initflag = false;
 	public int docnum;
-	
+	// 从配置文件初始参数
 	public static LdaArgs initLdaArgs(String configPath) {
 
 		LdaArgs ldaArgs = new LdaArgs();
 		try {
 			InputStream is = new FileInputStream(configPath);
 			properties.load(is);
-			parseProperties(ldaArgs);
+			parseProperties(ldaArgs);   // 从配置文件初始LDA参数
 //			String _alpha = properties.getProperty("alpha");
 //			String _beta = properties.getProperty("beta");
 //			String _dfile = properties.getProperty("dfile");
@@ -82,7 +81,7 @@ public class LdaArgs {
 		}
 		return ldaArgs;
 	}
-	
+	// 从配置文件初始LDA参数
 	public static void parseProperties(LdaArgs ldaArgs) {
 		String _alpha = properties.getProperty("alpha");
 		String _beta = properties.getProperty("beta");
@@ -118,6 +117,7 @@ public class LdaArgs {
 		ldaArgs.docnum= Integer.parseInt(_docnum);
 	}
 	
+	// i*10个主题
 	public void increaseNtopic(int i) {
 		ntopics = i * 10;
 		alpha = 50d / (i * 10); 
