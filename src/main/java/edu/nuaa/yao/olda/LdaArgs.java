@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class LdaArgs {
-	//LDA参数配置文件
+	// LDA参数配置文件
 	public static Properties properties = new Properties();
 	public double beta = 0.01;
 	public String dfile = "";
